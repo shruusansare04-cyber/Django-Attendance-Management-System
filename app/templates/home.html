@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Attendance Management System</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet"
+          href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: "Segoe UI", Arial, sans-serif;
+            background: #f5f7fb;
+            color: #172033;
+        }
+
+        /* =========================
+           Navbar
+        ========================= */
+
+        .navbar {
+            background: #101c3d;
+            padding: 15px 0;
+        }
+
+        .navbar-brand {
+            font-size: 21px;
+            font-weight: 700;
+            letter-spacing: .3px;
+        }
+
+        .navbar-brand i {
+            color: #60a5fa;
+        }
+
+        .nav-link {
+            color: rgba(255,255,255,.85) !important;
+            font-weight: 500;
+            margin-left: 8px;
+            transition: .3s;
+        }
+
+        .nav-link:hover {
+            color: white !important;
+        }
+
+        .login-btn {
+            border-radius: 10px;
+            padding: 8px 18px;
+        }
+
+        .admin-btn {
+            border-radius: 10px;
+            padding: 8px 18px;
+        }
+
+        /* =========================
+           Hero
+        ========================= */
+
+        .hero {
+            background: linear-gradient(135deg, #101c3d, #2563eb);
+            color: white;
+            padding: 90px 20px 100px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            width: 350px;
+            height: 350px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.06);
+            top: -150px;
+            right: -80px;
+        }
+
+        .hero::after {
+            content: "";
+            position: absolute;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            background: rgba(255,255,255,.05);
+            bottom: -130px;
+            left: -70px;
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 2;
+        }
+
+        .hero-badge {
+            display: inline-block;
+            background: rgba(255,255,255,.12);
+            border: 1px solid rgba(255,255,255,.2);
+            padding: 8px 18px;
+            border-radius: 30px;
+            font-size: 14px;
+            margin-bottom: 22px;
+        }
+
+        .hero h1 {
+            font-size: 48px;
+            font-weight: 750;
+            line-height: 1.15;
+        }
+
+        .hero h1 span {
+            color: #93c5fd;
+        }
+
+        .hero p {
+            font-size: 18px;
+            color: rgba(255,255,255,.85);
+            max-width: 720px;
+            margin: 20px auto 30px;
+            line-height: 1.7;
+        }
+
+        .hero-buttons .btn {
+            padding: 12px 25px;
+            border-radius: 10px;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        /* =========================
+           Stats
+        ========================= */
+
+        .stats-wrapper {
+            margin-top: -45px;
+            position: relative;
+            z-index: 5;
+        }
+
+        .stat-card {
+            background: white;
+            border-radius: 16px;
+            padding: 25px 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(15,23,42,.10);
+            border: 1px solid #eef1f6;
+            height: 100%;
+        }
+
+        .stat-card i {
+            font-size: 28px;
+            color: #2563eb;
+            margin-bottom: 8px;
+        }
+
+        .stat-card h3 {
+            font-size: 27px;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .stat-card p {
+            color: #6b7280;
+            margin: 0;
+            font-size: 14px;
+        }
+
+        /* =========================
+           Section Heading
+        ========================= */
+
+        .section-heading {
+            text-align: center;
+            margin: 75px 0 40px;
+        }
+
+        .section-heading h2 {
+            font-size: 32px;
+            font-weight: 700;
+        }
+
+        .section-heading p {
+            color: #6b7280;
+            margin-top: 10px;
+        }
+
+        /* =========================
+           Feature Cards
+        ========================= */
+
+        .feature-card {
+            background: white;
+            border: 1px solid #edf0f5;
+            border-radius: 18px;
+            padding: 30px;
+            height: 100%;
+            transition: .3s ease;
+            box-shadow: 0 5px 20px rgba(15,23,42,.04);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 35px rgba(15,23,42,.10);
+        }
+
+        .icon-box {
+            width: 62px;
+            height: 62px;
+            border-radius: 16px;
+            background: #eaf1ff;
+            color: #2563eb;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 28px;
+            margin-bottom: 20px;
+        }
+
+        .feature-card h4 {
+            font-size: 20px;
+            font-weight: 700;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.6;
+            min-height: 50px;
+        }
+
+        .feature-card .btn {
+            border-radius: 9px;
+            padding: 9px 18px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           CTA
+        ========================= */
+
+        .cta {
+            margin-top: 80px;
+            background: linear-gradient(135deg, #172554, #2563eb);
+            color: white;
+            border-radius: 24px;
+            padding: 55px 30px;
+            text-align: center;
+        }
+
+        .cta h2 {
+            font-weight: 700;
+            font-size: 32px;
+        }
+
+        .cta p {
+            color: rgba(255,255,255,.82);
+            margin: 12px auto 25px;
+            max-width: 650px;
+        }
+
+        .cta .btn {
+            border-radius: 10px;
+            padding: 11px 25px;
+            font-weight: 600;
+        }
+
+        /* =========================
+           Footer
+        ========================= */
+
+        .footer {
+            margin-top: 70px;
+            background: #101c3d;
+            color: white;
+            padding: 35px 20px;
+        }
+
+        .footer-title {
+            font-size: 20px;
+            font-weight: 700;
+        }
+
+        .footer p {
+            color: rgba(255,255,255,.7);
+            margin: 8px 0 0;
+        }
+
+        .footer-line {
+            border-top: 1px solid rgba(255,255,255,.12);
+            margin-top: 25px;
+            padding-top: 20px;
+            color: rgba(255,255,255,.55);
+            font-size: 14px;
+        }
+
+        /* =========================
+           Responsive
+        ========================= */
+
+        @media (max-width: 768px) {
+
+            .hero {
+                padding: 65px 20px 80px;
+            }
+
+            .hero h1 {
+                font-size: 34px;
+            }
+
+            .hero p {
+                font-size: 16px;
+            }
+
+            .section-heading {
+                margin-top: 55px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<!-- =========================
+     NAVBAR
+========================= -->
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+
+    <div class="container">
+
+        <a class="navbar-brand" href="{% url 'home' %}">
+            <i class="bi bi-calendar-check me-2"></i>
+            Attendance System
+        </a>
+
+
+        <button class="navbar-toggler"
+                type="button"
+                data-bs-toggle="collapse"
+                data-bs-target="#mainNavbar">
+
+            <span class="navbar-toggler-icon"></span>
+
+        </button>
+
+
+        <div class="collapse navbar-collapse" id="mainNavbar">
+
+            <ul class="navbar-nav ms-auto align-items-lg-center">
+
+
+                <li class="nav-item">
+                    <a class="nav-link active"
+                       href="{% url 'home' %}">
+                        <i class="bi bi-house me-1"></i>
+                        Home
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'student_list' %}">
+                        <i class="bi bi-people me-1"></i>
+                        Students
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'teacher_list' %}">
+                        <i class="bi bi-person-badge me-1"></i>
+                        Teachers
+                    </a>
+                </li>
+
+
+                <li class="nav-item">
+                    <a class="nav-link"
+                       href="{% url 'subject_list' %}">
+                        <i class="bi bi-book me-1"></i>
+                        Subjects
+                    </a>
+                </li>
+
+
+                <!-- Attendance Dropdown -->
+
+                <li class="nav-item dropdown">
+
+                    <a class="nav-link dropdown-toggle"
+                       href="#"
+                       role="button"
+                       data-bs-toggle="dropdown">
+
+                        <i class="bi bi-calendar-check me-1"></i>
+                        Attendance
+
+                    </a>
+
+
+                    <ul class="dropdown-menu dropdown-menu-end">
+
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'mark_attendance' %}">
+
+                                <i class="bi bi-check2-square me-2"></i>
+                                Mark Attendance
+
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'attendance_list' %}">
+
+                                <i class="bi bi-clock-history me-2"></i>
+                                Attendance History
+
+                            </a>
+                        </li>
+
+
+                        <li>
+                            <a class="dropdown-item"
+                               href="{% url 'attendance_percentage' %}">
+
+                                <i class="bi bi-bar-chart me-2"></i>
+                                Attendance Report
+
+                            </a>
+                        </li>
+
+                    </ul>
+
+                </li>
+
+
+                <!-- Login -->
+
+                <li class="nav-item ms-lg-3 mt-2 mt-lg-0">
+
+                    <a class="btn btn-outline-light login-btn"
+                       href="{% url 'login' %}">
+
+                        <i class="bi bi-box-arrow-in-right me-1"></i>
+                        Login
+
+                    </a>
+
+                </li>
+
+
+                <!-- Admin -->
+
+                <li class="nav-item ms-lg-2 mt-2 mt-lg-0">
+
+                    <a class="btn btn-light text-primary admin-btn"
+                       href="/admin/">
+
+                        <i class="bi bi-shield-lock me-1"></i>
+                        Admin
+
+                    </a>
+
+                </li>
+
+
+            </ul>
+
+        </div>
+
+    </div>
+
+</nav>
+
+
+
+<!-- =========================
+     HERO SECTION
+========================= -->
+
+<section class="hero">
+
+    <div class="container text-center hero-content">
+
+        <div class="hero-badge">
+
+            <i class="bi bi-stars me-2"></i>
+
+            Smart Attendance Management
+
+        </div>
+
+
+        <h1>
+
+            Attendance Management
+            <span>System</span>
+
+        </h1>
+
+
+        <p>
+
+            A smart and efficient platform to manage
+            students, teachers, subjects and attendance
+            records — all in one place.
+
+        </p>
+
+
+        <div class="hero-buttons">
+
+            <a href="{% url 'login' %}"
+               class="btn btn-light">
+
+                <i class="bi bi-box-arrow-in-right me-2"></i>
+
+                Get Started
+
+            </a>
+
+
+            <a href="{% url 'student_list' %}"
+               class="btn btn-outline-light">
+
+                <i class="bi bi-people me-2"></i>
+
+                View Students
+
+            </a>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+
+<!-- =========================
+     STATS
+========================= -->
+
+<div class="container stats-wrapper">
+
+    <div class="row g-3">
+
+        <div class="col-md-3 col-6">
+
+            <div class="stat-card">
+
+                <i class="bi bi-people"></i>
+
+                <h3>Students</h3>
+
+                <p>Student Management</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3 col-6">
+
+            <div class="stat-card">
+
+                <i class="bi bi-person-badge"></i>
+
+                <h3>Teachers</h3>
+
+                <p>Teacher Management</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3 col-6">
+
+            <div class="stat-card">
+
+                <i class="bi bi-book"></i>
+
+                <h3>Subjects</h3>
+
+                <p>Subject Management</p>
+
+            </div>
+
+        </div>
+
+
+        <div class="col-md-3 col-6">
+
+            <div class="stat-card">
+
+                <i class="bi bi-bar-chart"></i>
+
+                <h3>Reports</h3>
+
+                <p>Attendance Reports</p>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     FEATURES
+========================= -->
+
+<div class="container">
+
+    <div class="section-heading">
+
+        <h2>Everything You Need</h2>
+
+        <p>
+            Manage your complete attendance system easily and efficiently.
+        </p>
+
+    </div>
+
+
+    <div class="row g-4">
+
+
+        <!-- Students -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="feature-card">
+
+                <div class="icon-box">
+
+                    <i class="bi bi-people"></i>
+
+                </div>
+
+                <h4>Student Management</h4>
+
+                <p>
+                    Add, view and manage student information
+                    from one simple platform.
+                </p>
+
+                <a href="{% url 'student_list' %}"
+                   class="btn btn-primary">
+
+                    View Students
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Teachers -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="feature-card">
+
+                <div class="icon-box">
+
+                    <i class="bi bi-person-badge"></i>
+
+                </div>
+
+                <h4>Teacher Management</h4>
+
+                <p>
+                    Manage teacher information and
+                    assigned subjects efficiently.
+                </p>
+
+                <a href="{% url 'teacher_list' %}"
+                   class="btn btn-primary">
+
+                    View Teachers
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Subjects -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="feature-card">
+
+                <div class="icon-box">
+
+                    <i class="bi bi-book"></i>
+
+                </div>
+
+                <h4>Subject Management</h4>
+
+                <p>
+                    Maintain subjects and their unique
+                    subject codes easily.
+                </p>
+
+                <a href="{% url 'subject_list' %}"
+                   class="btn btn-primary">
+
+                    View Subjects
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Mark Attendance -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="feature-card">
+
+                <div class="icon-box">
+
+                    <i class="bi bi-check2-square"></i>
+
+                </div>
+
+                <h4>Mark Attendance</h4>
+
+                <p>
+                    Quickly mark student attendance
+                    with date and subject details.
+                </p>
+
+                <a href="{% url 'mark_attendance' %}"
+                   class="btn btn-success">
+
+                    Mark Attendance
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Attendance History -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="feature-card">
+
+                <div class="icon-box">
+
+                    <i class="bi bi-clock-history"></i>
+
+                </div>
+
+                <h4>Attendance History</h4>
+
+                <p>
+                    View complete attendance records
+                    and track student history.
+                </p>
+
+                <a href="{% url 'attendance_list' %}"
+                   class="btn btn-dark">
+
+                    View History
+
+                </a>
+
+            </div>
+
+        </div>
+
+
+        <!-- Reports -->
+
+        <div class="col-lg-4 col-md-6">
+
+            <div class="feature-card">
+
+                <div class="icon-box">
+
+                    <i class="bi bi-bar-chart"></i>
+
+                </div>
+
+                <h4>Attendance Reports</h4>
+
+                <p>
+                    Check attendance percentage and
+                    monitor student performance.
+                </p>
+
+                <a href="{% url 'attendance_percentage' %}"
+                   class="btn btn-warning">
+
+                    View Reports
+
+                </a>
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+
+    <!-- =========================
+         CTA
+    ========================= -->
+
+    <div class="cta">
+
+        <h2>Ready to Manage Attendance?</h2>
+
+        <p>
+            Login to your account and access your
+            personalized attendance dashboard.
+        </p>
+
+        <a href="{% url 'login' %}"
+           class="btn btn-light">
+
+            <i class="bi bi-box-arrow-in-right me-2"></i>
+
+            Login to System
+
+        </a>
+
+    </div>
+
+</div>
+
+
+
+<!-- =========================
+     FOOTER
+========================= -->
+
+<footer class="footer">
+
+    <div class="container text-center">
+
+        <div class="footer-title">
+
+            <i class="bi bi-calendar-check me-2"></i>
+
+            Attendance Management System
+
+        </div>
+
+
+        <p>
+            Smart • Simple • Efficient
+        </p>
+
+
+        <div class="footer-line">
+
+            © 2026 Attendance Management System
+            | Developed with Django & Bootstrap
+
+        </div>
+
+    </div>
+
+</footer>
+
+
+
+<!-- Bootstrap JavaScript -->
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+</script>
+
+
+</body>
+
+</html>

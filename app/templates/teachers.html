@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teacher List | Attendance System</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+          rel="stylesheet">
+
+    <style>
+        body {
+            background: #f3f6fb;
+            font-family: Arial, sans-serif;
+            color: #172554;
+        }
+
+        .page-container {
+            max-width: 1600px;
+            margin: auto;
+            padding: 28px 24px;
+        }
+
+        .page-title {
+            font-size: 38px;
+            font-weight: 700;
+            color: #172554;
+            margin-bottom: 4px;
+        }
+
+        .page-subtitle {
+            color: #64748b;
+            font-size: 18px;
+        }
+
+        .btn-add {
+            background: linear-gradient(135deg, #0B132B, #3A506B);
+            color: white;
+            border: none;
+            padding: 12px 19px;
+            border-radius: 8px;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .btn-add:hover {
+            background: #0B132B;
+            color: white;
+        }
+
+        .main-card {
+            border: none;
+            border-radius: 22px;
+            overflow: hidden;
+            margin-top: 28px;
+            box-shadow: 0 10px 25px rgba(15, 23, 42, 0.14);
+        }
+
+        .teacher-table {
+            margin-bottom: 0;
+            vertical-align: middle;
+        }
+
+        .teacher-table thead th {
+            background: #1C2541;
+            color: white;
+            border: none;
+            padding: 22px 30px;
+            font-size: 18px;
+            white-space: nowrap;
+        }
+
+        .teacher-table tbody td {
+            padding: 15px 30px;
+            border-color: #dbe2ea;
+            font-size: 17px;
+            color: #111827;
+        }
+
+        .teacher-table tbody tr:hover td {
+            background: #eef2ff;
+        }
+
+        .teacher-link {
+            color: #1d4ed8;
+            text-decoration: none;
+            font-weight: 600;
+        }
+
+        .teacher-link:hover {
+            color: #0B132B;
+            text-decoration: underline;
+        }
+
+        .subject-badge {
+            display: inline-block;
+            margin: 3px 4px 3px 0;
+            padding: 8px 14px;
+            border-radius: 25px;
+            background: #1C2541;
+            color: white;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .btn-back {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 11px 17px;
+            color: #475569;
+            border: 1px solid #64748b;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: 0.2s;
+        }
+
+        .btn-back:hover {
+            background: #1C2541;
+            color: white;
+            border-color: #1C2541;
+        }
+
+        .empty-state {
+            padding: 45px 20px !important;
+            color: #64748b !important;
+        }
+
+        @media (max-width: 768px) {
+            .page-container {
+                padding: 20px 12px;
+            }
+
+            .page-title {
+                font-size: 28px;
+            }
+
+            .top-header {
+                align-items: flex-start !important;
+                flex-direction: column;
+                gap: 15px;
+            }
+
+            .teacher-table thead th,
+            .teacher-table tbody td {
+                padding: 14px 12px;
+                font-size: 14px;
+                white-space: nowrap;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="page-container">
+
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center top-header">
+
+        <div>
+            <h1 class="page-title">👨‍🏫 Teacher List</h1>
+            <p class="page-subtitle mb-0">
+                Manage teachers and their assigned subjects
+            </p>
+        </div>
+
+        <a href="{% url 'add_teacher' %}" class="btn btn-add">
+            + Add Teacher
+        </a>
+
+    </div>
+
+    <!-- Teacher Table -->
+    <div class="card main-card">
+        <div class="table-responsive">
+
+            <table class="table table-hover teacher-table">
+
+                <thead>
+                    <tr>
+                        <th class="px-4">ID</th>
+                        <th>Teacher Name</th>
+                        <th>Email</th>
+                        <th>Assigned Subjects</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {% for teacher in teachers %}
+                    <tr>
+                        <td class="px-4">{{ teacher.id }}</td>
+
+                        <td>
+                            <a href="{% url 'teacher_detail' teacher.id %}"
+                               class="teacher-link">
+                                👩‍🏫 {{ teacher.name }}
+                            </a>
+                        </td>
+
+                        <td>{{ teacher.email }}</td>
+
+                        <td>
+                            {% for subject in teacher.subjects.all %}
+                                <span class="subject-badge">
+                                    {{ subject.name }}
+                                </span>
+                            {% empty %}
+                                <span class="text-muted">
+                                    No Subject Assigned
+                                </span>
+                            {% endfor %}
+                        </td>
+                    </tr>
+
+                    {% empty %}
+                    <tr>
+                        <td colspan="4" class="text-center empty-state">
+                            <h5>No Teachers Found</h5>
+                            <p class="mb-3">Add your first teacher.</p>
+                            <a href="{% url 'add_teacher' %}"
+                               class="btn btn-add">
+                                + Add Teacher
+                            </a>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+
+            </table>
+
+        </div>
+    </div>
+
+    <!-- Back Button -->
+    <a href="{% url 'admin_dashboard' %}" class="btn-back">
+        ← Back to Dashboard
+    </a>
+
+</div>
+
+</body>
+</html>
